@@ -1,0 +1,63 @@
+version: "3"
+networks:
+  localdev:
+    driver: bridge
+
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: ${APPNAME}-nginx
+    ports:
+      - "8088:80"
+    links:
+      - php
+      - postgres
+    volumes:
+      - ./nginx/server.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./app:/var/www/html
+    depends_on:
+      - php
+      - postgres
+    networks:
+      - localdev
+
+  postgres:
+    image: postgres:15.8-alpine
+    container_name: ${APPNAME}-postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database:/var/lib/postgresql
+    tty: true
+    networks:
+      - localdev
+
+  php:
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    container_name: ${APPNAME}-php
+    volumes:
+      - ./app:/var/wwww/html
+    ports:
+      - "9000:9000"
+      - "5902:5902"
+    networks:
+      - localdev
+
+  composer:
+    image: composer
+    container_name: ${APPNAME}-composer
+    working_dir: /var/www/html
+    restart: 'no'
+    volumes:
+      - ./app:/var/www/html
+    networks:
+      - localdev

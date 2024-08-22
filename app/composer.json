@@ -1,0 +1,28 @@
+{
+    "name": "pierre/simpleframework",
+    "description": "A simple PHP framework",
+    "type": "project",
+    "require": {
+        "nikic/fast-route": "^1.3",
+        "middlewares/fast-route": "^2.0",
+        "middlewares/firewall": "^2.0",
+        "middlewares/payload": "^3.0",
+        "middlewares/error-handler": "^3.0",
+        "middlewares/request-handler": "^2.0",
+        "middlewares/negotiation": "^2.1",
+        "middlewares/utils": "^3.3",
+        "guzzlehttp/psr7": "^2.6"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Pierre\\SimpleFramework\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Pierre Chretien",
+            "email": "pchretien@surex.com"
+        }
+    ]
+}
